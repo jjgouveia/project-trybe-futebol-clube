@@ -1,8 +1,11 @@
 import Teams from '../database/models/Teams';
 import Matches from '../database/models/Matches';
 import IResponse from '../interfaces/IResponse';
+import IMatch from '../interfaces/IMatch';
+import TeamService from './team.service';
 
 export default class MatchService {
+  teamService = new TeamService();
   constructor(
     private matches = Matches,
   ) {}
@@ -32,5 +35,25 @@ export default class MatchService {
     }
 
     return { type: 200, message: query };
+  }
+
+  public async createMatch(matchInfo: IMatch): Promise<IResponse> {
+    const { homeTeam, awayTeam } = matchInfo;
+    const teamHome = this.teamService.getTeamsById(homeTeam);
+    const teamAway = this.teamService.getTeamsById(awayTeam);
+
+    if ((await teamHome).type || (await teamAway).type === 404) {
+      return { type: 404, message: 'There is no team with such id!' };
+    }
+    if (homeTeam === awayTeam) {
+      return { type: 422, message: 'It is not possible to create a match with two equal teams' };
+    }
+
+    const match = await this.matches.create({ ...matchInfo, inProgress: 1 });
+    return { type: 201, message: match };
+  }
+
+  public async updateProgressMatch(id: string): Promise<void> {
+    await this.matches.update({ inProgress: 0 }, { where: { id } });
   }
 }

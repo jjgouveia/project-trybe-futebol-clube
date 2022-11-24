@@ -1,4 +1,4 @@
 export default interface IResponse {
-  type: unknown,
+  type?: unknown,
   message?: unknown,
 }

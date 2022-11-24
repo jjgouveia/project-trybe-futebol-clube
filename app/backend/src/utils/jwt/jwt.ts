@@ -11,11 +11,7 @@ export default class JWTService {
   };
 
   validateToken = (token: string): jwt.JwtPayload => {
-    try {
-      const validation = jwt.verify(token, secret);
-      return validation as jwt.JwtPayload;
-    } catch (error) {
-      throw new Error('Token must be a valid number');
-    }
+    const validation = jwt.verify(token, secret);
+    return validation as jwt.JwtPayload;
   };
 }

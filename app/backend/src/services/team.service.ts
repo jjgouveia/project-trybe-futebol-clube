@@ -13,7 +13,7 @@ export default class TeamService {
 
   public async getTeamsById(id: string):Promise<IResponse> {
     const teams = await this.teams.findByPk(id);
-    if (!teams) return { type: 404, message: 'Time não encontrado' };
+    if (!teams) return { type: 404, message: 'There is no team with such id!' };
     return { type: null, message: teams };
   }
 }

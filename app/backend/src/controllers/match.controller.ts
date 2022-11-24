@@ -22,4 +22,21 @@ export default class MatchController {
       } });
     }
   }
+
+  async createMatch(req: Request, res: Response) {
+    const matchInfo = req.body;
+
+    const { type, message } = await this.matchService.createMatch(matchInfo);
+    if (type !== 201) {
+      return res.status(type as number).json({ message });
+    }
+    return res.status(type as number).json(message);
+  }
+
+  async updateMatchProgress(req: Request, res: Response) {
+    const { id } = req.params;
+    await this.matchService.updateProgressMatch(id);
+
+    return res.status(200).json({ message: 'Finished' });
+  }
 }
