@@ -23,6 +23,15 @@ export default class MatchController {
     }
   }
 
+  async getMatchById(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const { type, message } = await this.matchService.getMatchById(id);
+    if (type) return res.status(type as number).json({ message });
+
+    return res.status(200).json(message);
+  }
+
   async createMatch(req: Request, res: Response) {
     const matchInfo = req.body;
 
@@ -38,5 +47,14 @@ export default class MatchController {
     await this.matchService.updateProgressMatch(id);
 
     return res.status(200).json({ message: 'Finished' });
+  }
+
+  async updateScoreMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const { type, message } = await this.matchService.getMatchById(id);
+    if (type) return res.status(type as number).json({ message });
+    await this.matchService.updateScoreMatch(id, req.body);
+
+    return res.status(200).json({ updatedScore: message });
   }
 }

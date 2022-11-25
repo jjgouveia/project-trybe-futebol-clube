@@ -1,4 +1,5 @@
 import * as bcryptjs from 'bcryptjs';
+import ILogin from '../interfaces/ILogin';
 import IResponse from '../interfaces/IResponse';
 import Users from '../database/models/Users';
 import Jwt from '../utils/jwt/jwt';
@@ -17,7 +18,8 @@ export default class LoginService {
     return query;
   }
 
-  public async validateLogin(email: string, password: string): Promise<IResponse> {
+  public async validateLogin(crendentials: ILogin): Promise<IResponse> {
+    const { email, password } = crendentials;
     if (!email || !password) {
       return { type: 400 };
     }

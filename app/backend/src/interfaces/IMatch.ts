@@ -1,6 +1,9 @@
-export default interface IMatch {
+export interface INewMatch extends IUpdateScore{
   homeTeam: string,
   awayTeam: string,
-  homeTeamGoals: number,
-  awayTeamGoals: number,
+}
+
+export interface IUpdateScore {
+  homeTeamGoals: string,
+  awayTeamGoals: string
 }

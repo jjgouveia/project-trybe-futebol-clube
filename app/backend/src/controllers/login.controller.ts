@@ -15,8 +15,7 @@ export default class LoginController {
   }
 
   async validateLogin(req: Request, res: Response) {
-    const { email, password } = req.body;
-    const { type } = await this.loginService.validateLogin(email, password);
+    const { type } = await this.loginService.validateLogin(req.body);
 
     if (type !== 200) {
       const message = type === 400

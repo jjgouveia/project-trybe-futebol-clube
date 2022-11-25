@@ -1,7 +1,7 @@
 import Teams from '../database/models/Teams';
 import Matches from '../database/models/Matches';
 import IResponse from '../interfaces/IResponse';
-import IMatch from '../interfaces/IMatch';
+import { INewMatch, IUpdateScore } from '../interfaces/IMatch';
 import TeamService from './team.service';
 
 export default class MatchService {
@@ -18,6 +18,13 @@ export default class MatchService {
       ],
     });
     return query;
+  }
+
+  public async getMatchById(id: string): Promise<IResponse> {
+    const query = await this.matches.findByPk(id);
+
+    if (!query) return { type: 404, message: 'There is no match with such id!' };
+    return { type: null, message: query };
   }
 
   public async getMatchesByProgress(str: string): Promise<IResponse> {
@@ -37,7 +44,7 @@ export default class MatchService {
     return { type: 200, message: query };
   }
 
-  public async createMatch(matchInfo: IMatch): Promise<IResponse> {
+  public async createMatch(matchInfo: INewMatch): Promise<IResponse> {
     const { homeTeam, awayTeam } = matchInfo;
     const teamHome = this.teamService.getTeamsById(homeTeam);
     const teamAway = this.teamService.getTeamsById(awayTeam);
@@ -55,5 +62,10 @@ export default class MatchService {
 
   public async updateProgressMatch(id: string): Promise<void> {
     await this.matches.update({ inProgress: 0 }, { where: { id } });
+  }
+
+  public async updateScoreMatch(id: string, updateParams: IUpdateScore): Promise<void> {
+    const { homeTeamGoals, awayTeamGoals } = updateParams;
+    await this.matches.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
   }
 }
