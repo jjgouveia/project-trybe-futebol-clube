@@ -1,4 +1,5 @@
-import IResponse from '../interfaces/IResponse';
+import { ITeam } from '../interfaces/ITeam';
+import HttpException from '../utils/HttpException';
 import Teams from '../database/models/Teams';
 
 export default class TeamService {
@@ -11,9 +12,9 @@ export default class TeamService {
     return teams;
   }
 
-  public async getTeamsById(id: string):Promise<IResponse> {
+  public async getTeamsById(id: string):Promise<ITeam> {
     const teams = await this.teams.findByPk(id);
-    if (!teams) return { type: 404, message: 'There is no team with such id!' };
-    return { type: null, message: teams };
+    if (!teams) throw new HttpException(404, 'There is no team with such id!');
+    return teams;
   }
 }

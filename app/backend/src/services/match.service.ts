@@ -49,7 +49,7 @@ export default class MatchService {
     const teamHome = this.teamService.getTeamsById(homeTeam);
     const teamAway = this.teamService.getTeamsById(awayTeam);
 
-    if ((await teamHome).type || (await teamAway).type === 404) {
+    if (((await teamHome).id) || (await (await teamAway).id) === 404) {
       return { type: 404, message: 'There is no team with such id!' };
     }
     if (homeTeam === awayTeam) {

@@ -6,7 +6,10 @@ const secret = process.env.JWT_SECRET || 'jwt_secret';
 
 export default class JWTService {
   createToken = (data: IJwt) => {
-    const token = jwt.sign(data, secret);
+    const token = jwt.sign(data, secret, {
+      algorithm: 'HS256',
+      expiresIn: '1d',
+    });
     return token;
   };
 

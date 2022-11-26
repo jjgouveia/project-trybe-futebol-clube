@@ -8,10 +8,11 @@ export default class LoginController {
 
   async getUserWithToken(req: Request, res: Response) {
     const { authorization } = req.headers;
-    const result = await this.loginService.getUserByToken(authorization as string);
-    if (result) {
-      return res.status(200).json({ role: result.role });
+    const query = await this.loginService.getUserByToken(authorization as string);
+    if (!query) {
+      return res.status(401).json({ message: 'User not found' });
     }
+    return res.status(200).json({ role: query.role });
   }
 
   async validateLogin(req: Request, res: Response) {
