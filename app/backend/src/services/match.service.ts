@@ -1,11 +1,9 @@
 import Teams from '../database/models/Teams';
 import Matches from '../database/models/Matches';
 import { INewMatch, IUpdateScore } from '../interfaces/IMatch';
-import TeamService from './team.service';
 import HttpException from '../utils/HttpException';
 
 export default class MatchService {
-  private teamService = new TeamService();
   private _teamModel = Teams;
 
   constructor(
