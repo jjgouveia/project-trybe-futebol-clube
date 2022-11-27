@@ -1,11 +1,13 @@
 import Teams from '../database/models/Teams';
 import Matches from '../database/models/Matches';
-import IResponse from '../interfaces/IResponse';
 import { INewMatch, IUpdateScore } from '../interfaces/IMatch';
 import TeamService from './team.service';
+import HttpException from '../utils/HttpException';
 
 export default class MatchService {
-  teamService = new TeamService();
+  private teamService = new TeamService();
+  private _teamModel = Teams;
+
   constructor(
     private matches = Matches,
   ) {}
@@ -20,15 +22,17 @@ export default class MatchService {
     return query;
   }
 
-  public async getMatchById(id: string): Promise<IResponse> {
+  public async getMatchById(id: string): Promise<Matches> {
     const query = await this.matches.findByPk(id);
 
-    if (!query) return { type: 404, message: 'There is no match with such id!' };
-    return { type: null, message: query };
+    if (!query) throw new HttpException(404, 'There is no match with such id!');
+
+    return query;
   }
 
-  public async getMatchesByProgress(str: string): Promise<IResponse> {
+  public async getMatchesByProgress(str: string): Promise<Matches[]> {
     const inProgress = JSON.parse(str);
+
     const query = await this.matches.findAll({
       where: { inProgress },
       include: [
@@ -37,27 +41,29 @@ export default class MatchService {
       ],
     });
 
-    if (!query) {
-      return { type: 404, message: 'No matches found' };
-    }
+    if (!query) throw new HttpException(404, 'No matches found');
 
-    return { type: 200, message: query };
+    return query;
   }
 
-  public async createMatch(matchInfo: INewMatch): Promise<IResponse> {
-    const { homeTeam, awayTeam } = matchInfo;
-    const teamHome = this.teamService.getTeamsById(homeTeam);
-    const teamAway = this.teamService.getTeamsById(awayTeam);
-
-    if (((await teamHome).id) || (await (await teamAway).id) === 404) {
-      return { type: 404, message: 'There is no team with such id!' };
-    }
+  public async createValidation({ homeTeam, awayTeam }: INewMatch) {
     if (homeTeam === awayTeam) {
-      return { type: 422, message: 'It is not possible to create a match with two equal teams' };
+      throw new HttpException(422, 'It is not possible to create a match with two equal teams');
     }
+
+    const teamHome = await this._teamModel.findByPk(homeTeam);
+    const teamAway = await this._teamModel.findByPk(awayTeam);
+
+    if (!teamHome || !teamAway) {
+      throw new HttpException(404, 'There is no team with such id!');
+    }
+  }
+
+  public async createMatch(matchInfo: INewMatch): Promise<Matches> {
+    await this.createValidation(matchInfo);
 
     const match = await this.matches.create({ ...matchInfo, inProgress: 1 });
-    return { type: 201, message: match };
+    return match;
   }
 
   public async updateProgressMatch(id: string): Promise<void> {
@@ -66,10 +72,10 @@ export default class MatchService {
 
   public async updateScoreMatch(id: string, updateParams: IUpdateScore): Promise<Matches | null> {
     const { homeTeamGoals, awayTeamGoals } = updateParams;
+    const request = this.matches.findByPk(id);
+    if (!request) throw new HttpException(404, 'There is no match with such id!');
     await this.matches.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
 
-    const result = this.matches.findByPk(id);
-
-    return result;
+    return request;
   }
 }
