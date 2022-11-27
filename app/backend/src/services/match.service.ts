@@ -64,8 +64,12 @@ export default class MatchService {
     await this.matches.update({ inProgress: 0 }, { where: { id } });
   }
 
-  public async updateScoreMatch(id: string, updateParams: IUpdateScore): Promise<void> {
+  public async updateScoreMatch(id: string, updateParams: IUpdateScore): Promise<Matches | null> {
     const { homeTeamGoals, awayTeamGoals } = updateParams;
     await this.matches.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+
+    const result = this.matches.findByPk(id);
+
+    return result;
   }
 }

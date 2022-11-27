@@ -1,4 +1,4 @@
-import ILogin from '../../interfaces/ILogin'
+import { ILogin } from '../../interfaces/ILogin'
 import IUser from '../../interfaces/IUser'
 
 export const userMock: IUser = {

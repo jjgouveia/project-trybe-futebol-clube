@@ -53,8 +53,8 @@ export default class MatchController {
     const { id } = req.params;
     const { type, message } = await this.matchService.getMatchById(id);
     if (type) return res.status(type as number).json({ message });
-    await this.matchService.updateScoreMatch(id, req.body);
+    const result = await this.matchService.updateScoreMatch(id, req.body);
 
-    return res.status(200).json({ updatedScore: message });
+    return res.status(200).json({ updatedScore: result });
   }
 }
