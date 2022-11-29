@@ -35,3 +35,5 @@ export const invalidLogins: ILogin[] = [
       password: userMock.password
     },
 ];
+
+export const msgInvalidToken = { "message": "Token must be a valid token" };

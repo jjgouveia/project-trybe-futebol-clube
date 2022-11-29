@@ -1,9 +1,9 @@
 export interface INewMatch extends IUpdateScore{
-  homeTeam: string,
-  awayTeam: string,
+  homeTeam: string | number,
+  awayTeam: string | number,
 }
 
 export interface IUpdateScore {
-  homeTeamGoals: string,
-  awayTeamGoals: string
+  homeTeamGoals: string | number,
+  awayTeamGoals: string | number,
 }

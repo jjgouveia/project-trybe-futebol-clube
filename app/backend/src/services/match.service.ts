@@ -2,6 +2,7 @@ import Teams from '../database/models/Teams';
 import Matches from '../database/models/Matches';
 import { INewMatch, IUpdateScore } from '../interfaces/IMatch';
 import HttpException from '../utils/HttpException';
+// import { matchSchema } from './validations/schemas';
 
 export default class MatchService {
   private _teamModel = Teams;
@@ -9,6 +10,14 @@ export default class MatchService {
   constructor(
     private matches = Matches,
   ) {}
+
+  // private static validateMatchSchema(match: INewMatch): void {
+  //   const { error } = matchSchema.validate(match);
+  //   if (error) {
+  //     const status = 400;
+  //     throw new HttpException(status, error.message);
+  //   }
+  // }
 
   public async getAllMatches(): Promise<Matches[]> {
     const query = await this.matches.findAll({
@@ -58,6 +67,7 @@ export default class MatchService {
   }
 
   public async createMatch(matchInfo: INewMatch): Promise<Matches> {
+    // MatchService.validateMatchSchema(matchInfo);
     await this.createValidation(matchInfo);
 
     const match = await this.matches.create({ ...matchInfo, inProgress: 1 });
