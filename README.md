@@ -6,6 +6,8 @@ O aplicativo TFC é um site informativo sobre partidas e classificações de fut
 
 A proposta deste projeto era a de arquitetar e desenvolver uma API RESTfull integrada a um banco de dados MySQL por meio do ORM Sequelize, em que fosse possível utilizar endpoints para criar, exibir e atualizar resultado de partidas de futebol, classificação de times, lista de times, placar etc. A API está totalmente integrada ao Front-End.
 
+-- Sem sombra de dúvidas o projeto mais empolgante e desafiador do módulo de back-end até o momento.
+
 ## 💻 Tecnologias e Metodologias utilizadas
 
 * T.D.D
@@ -21,13 +23,13 @@ A proposta deste projeto era a de arquitetar e desenvolver uma API RESTfull inte
 * mocha
 
 ## Lições aprendidas e/ou reforçadas
-
+* Reforçar os aprendizados de TypeScript;
+* Reforçar os conceitos de P.O.O;
+* Reforçar os conceitos de S.O.L.I.D;
 * Escrever o código utilizando o padrão <em>M.S.C.</em> de arquitetura de software por camadas;
-* Fazer validações com a biblioteca JOI;
-* Criar rotas baseadas em <em>C.R.U.D.</em> e aplicar middlewares;
-* Utilizar queries SQL no Sequelize para as operações C.R.U.D;
+* Utilizar o Sequelize para as operações C.R.U.D;
 * Escrever API's RESTfull utilizando Node e Express;
-* Escrever testes assíncronos utilizando o <em>chai</em>, <em>sinon</em> e o <em>mocha</em>;
+* Escrever testes assíncronos utilizando o <em>chai</em>, <em>sinon</em> e <em>mocha</em>;
 
 
 ## 🛠 Instalação local
